@@ -2,11 +2,13 @@ const express = require('express')
 const crudController = require('./crudController')
 const User = require('../models/userModel')
 
-const { register } = require('./authController')
+const { register, login } = require('./authController')
 
 const router = express.Router()
 
-router.post('/', register)
+router.get('/', login)
+router.get('/', crudController.getOne(User))
 router.get('/', crudController.getAll(User))
 
+router.post('/', register)
 module.exports = router
