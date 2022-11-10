@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.get('/', login)
 router.get('/', crudController.getOne(User))
-router.get('/', crudController.getAll(User))
+router.get('/all', crudController.getAll(User))
 
 router.post('/', register)
 module.exports = router
