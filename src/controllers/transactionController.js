@@ -30,9 +30,9 @@ router.get('', crudController.getAll(Transaction))
 
 router.get('/transact', async (req, res) => {
   try {
-    console.log(req.query)
+    // console.log("transact query", req.query)
     const transactions = await Transaction.find({ user: req.query.userID })
-      // .populate('user', { password: false })
+      .populate('user', { password: false })
       .lean()
       .exec()
     return res.status(201).send({ transactions })
