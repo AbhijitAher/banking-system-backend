@@ -1,5 +1,6 @@
 const express = require('express')
 const userController = require('./controllers/userController')
+const transactionController = require('./controllers/transactionController')
 
 const app = express()
 
@@ -15,5 +16,6 @@ app.use((req, res, next) => {
 })
 
 app.use('/user', userController)
+app.use('/transaction', transactionController)
 
 module.exports = app
