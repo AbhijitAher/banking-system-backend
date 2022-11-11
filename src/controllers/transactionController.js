@@ -7,16 +7,26 @@ const User = require('../models/userModel')
 const router = express.Router()
 
 router.post('', async (req, res) => {
+  
+  const data = req.body.data
   try {
-    const item = await Transaction.create(req.body)
-    const user = await User.findById(req.body.user)
-
-    if (req.body.type == 'deposit') {
-      user.set('balance', user.balance + req.body.amount)
-    } else if (req.body.type == 'withdraw') {
-      user.set('balance', user.balance - req.body.amount)
+    const item = await Transaction.create(data)
+    const user = await User.findById(data.user)
+    
+    let balance;
+    if (data.type == 'deposit') {
+      user.set('balance', user.balance + data.amount)
+      // balance = user.balance + data.amount
+      // user.balance = user.balance + req.body.data.amount
+    } else if (data.type == 'withdraw') {
+      // balance = user.balance - data.amount
+      user.set('balance', user.balance - data.amount)
+      // user.balance = user.balance - req.body.data.amount
     }
+    
+    // user.set("balance", balance)
     user.save()
+     
 
     return res.status(201).send({ item, user })
   } catch (err) {
@@ -28,13 +38,15 @@ router.get('', crudController.getAll(Transaction))
 
 router.get('/transact', async (req, res) => {
   try {
-    const transations = await Transaction.find({ user: req.body.userId })
-    //   .populate('user', { password: false })
+    console.log(req.query)
+    const transactions = await Transaction.find({ user: req.query.userID })
+      //   .populate('user', { password: false })
       .lean()
       .exec()
-    return res.status(201).send({ transations })
+    return res.status(201).send({ transactions })
   } catch (err) {
-    return res.status(500).json({ status: 'failed', message: e.message })
+    console.log(err)
+    return res.status(500).json({ status: 'failed', message: err.message })
   }
 })
 
